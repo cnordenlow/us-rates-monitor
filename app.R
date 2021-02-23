@@ -11,11 +11,9 @@ library(rvest, warn.conflicts = FALSE)
 library(tidyverse, warn.conflicts = FALSE)
 library(stringr, warn.conflicts = FALSE)
 library(lubridate, warn.conflicts = FALSE)
-#library(gganimate, warn.conflicts = FALSE)
 library(gridExtra)
 library(rstudioapi)
-#library(gifski)
-#library(av)
+
 
 
 #####################################################################################################
@@ -28,25 +26,10 @@ library(rstudioapi)
 
 #install.packages("rstudioapi")
 
-#behövs när man kör lokalt
-setwd(dirname(getActiveDocumentContext()$path))  #This is used when running it local
+#When its run locally
+#setwd(dirname(getActiveDocumentContext()$path))  #This is used when running it local
 
-#source("C:\\Users\\chris\\Documents\\R_studio\\Projects\\R\\US_Rates\\Shiny\\import_test.r")
 source("importData.r")
-
-#source("import_test2.r")
-
-#tableUsRates <- read.table(
-#  "C:\\Users\\chris\\Documents\\R_studio\\tableUsRates.csv", 
-#  sep=",", header=TRUE)
-
-##Get table
-#tableUsRates <- read.table(
- # "C:\\Users\\chris\\Documents\\R_studio\\tableUsRates.csv", 
-  #sep=",", header=TRUE)
-
-
-#tableUsRates$date <- as.Date(tableUsRates$date) 
 
 ###Fix formats. needs to be done throughout the app. weird. 
 
@@ -395,16 +378,10 @@ ui <- dashboardPage(skin = "red",
 
 server <- function(input, output,session) {
   
-  
-  #set.seed(122)
-  # histdata <- rnorm(500)
-  
-  
+ 
   #current
   curve_type = c("yieldYear")
   title_text = paste("Treasury Yield Curve (par curve)", sep="")
-  # end_date = max(tableForShiny$date)
-  #  start_date = as.Date(max(tableForShiny$date)) - 30
   start_date = as.Date(max(tableForShiny$date)) - 365
   end_date = as.Date(max(tableForShiny$date))
   
@@ -460,10 +437,7 @@ server <- function(input, output,session) {
     
     title_text = paste("Treasury Yields Levels", sep="")
     subtitle_text = paste("Treasury Yields", sep="")
-    
-    
-    #start_date = "2020-01-01"
-    #end_date = "2021-01-01"
+
     
     df$date <- as.Date(df$date)
     df$rate <- as.numeric(df$rate)
@@ -508,9 +482,6 @@ server <- function(input, output,session) {
     start_date = as.Date(input$slider[1])
     end_date = as.Date(input$slider[2])
     
-    #  start_date = "2020-06-01"
-    # end_date = "2021-02-01"
-    
     df <- tableForShiny %>%
       #   filter(date %in% c(start_date, end_date))%>%
       filter(date >= start_date) %>%
@@ -536,20 +507,6 @@ server <- function(input, output,session) {
     
     df$date <- as.Date(df$date)
     df$rate <- as.numeric(df$rate)
-    
-
-    
- #        mutate(term = paste("yield", term, sep=""))%>%#fix name
-  #    pivot_wider(c("date", "des"),
-   #               names_from = term,
-    #              values_from = rate)%>%
-    #  mutate('3m10y' = round((yield10y - yield3m)*100,1))%>%
-    #  mutate('2y10y' = round((yield10y - yield2y)*100,1)) %>%
-    #  mutate("5y30y" = round((yield30y - yield5y)*100,1)) %>%
-    #  select(date,des,'3m10y', '2y10y', '5y30y') %>%
-     # pivot_longer(!c("date", "des"),
-      #             names_to  = "curve",
-       #            values_to = "rate")
     
     
     ###Show in basispoints
@@ -586,10 +543,7 @@ server <- function(input, output,session) {
   datasetInput_dash_curvature <- reactive({
     
     #Curve, line plot
-    
-    #    start_date = as.Date(max(tableForShiny$date)) - 365
-    #   end_date = as.Date(max(tableForShiny$date))
-    
+
     
     tableForShiny$date <- as.Date(tableForShiny$date)
     tableForShiny$rate <- as.numeric(tableForShiny$rate)
@@ -1039,8 +993,6 @@ server <- function(input, output,session) {
     
     df <- datasetInput_dashboard_frw_curve()
     
-    #  df3$date <- as.Date(df3$date)
-    #  df3$rate <- as.numeric(df3$rate)
     
     ###Fix names
     df <- df %>%
@@ -1278,44 +1230,6 @@ server <- function(input, output,session) {
     group_spreads <- input$line_plot_spreads
     
     
-    
-    
-    
-    #######Calculate Spreads, not expressed in spreads here
-    
-  #  df <- tableForShiny %>%
-  #    filter(date >= start_date) %>%
-  #    filter(date <= end_date)%>%
-  #    filter(des == "yieldYear") %>%
-  #    filter(term %in% c("3m", "10y", "2y", "5y", "30y")) %>%
-  #    filter(rate != "NA")%>%
-  #    mutate(term = paste("yield", term, sep=""))%>%#fix name
-  #    pivot_wider(c("date", "des"),
-   #               names_from = term,
-  #                values_from = rate)%>%
-  #    mutate('3m10y' = round((yield10y - yield3m)*1,4))%>%
-  #    mutate('2y10y' = round((yield10y - yield2y)*1,4)) %>%
-  #    mutate("5y30y" = round((yield30y - yield5y)*1,4)) %>%
-  #    mutate('2y5y10y' = round((2 * yield5y - yield2y - yield5y)*1,4))%>%
-  #    select(date, des, '3m10y', '2y10y', '5y30y', '2y5y10y') %>%
-  #    pivot_longer(!c("date", "des"),
-   #                names_to  = "term",
-  #                 values_to = "rate")%>%
-   #   mutate(des = "spread")
-    
-    
-   # df <- bind_rows(mutate_all(tableForShiny, as.character), mutate_all(df, as.character))
-    
-#    df <- arrange(df, date)
-#    df$term <- as.character(df$term)
-    
-#    df$des <- as.character(df$des)
-#    df$maturity <- as.numeric(df$maturity)
-#    df$info <- as.character(df$info)
-#    df$date <- as.Date(df$date)
- #   df$rate <- as.numeric(df$rate)
-    
-    
     df <- tableForShiny %>%
       filter(date >= start_date) %>%
       filter(date <= end_date)%>%
@@ -1326,8 +1240,7 @@ server <- function(input, output,session) {
     
     
     df
-    #  data_jobless_claims2%>%
-    # filter(rptdate==input$range_us)
+
   })
   
   
