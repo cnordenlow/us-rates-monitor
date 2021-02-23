@@ -12,8 +12,8 @@
 
 library(aws.s3)
 Sys.setenv(
-  "AWS_ACCESS_KEY_ID" = "AKIAJG2GGMVGWWIQTVDA",
-  "AWS_SECRET_ACCESS_KEY" = "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",
+  "AWS_ACCESS_KEY_ID" = "", ##key
+  "AWS_SECRET_ACCESS_KEY" = "", ##key
   "AWS_DEFAULT_REGION" = "eu-north-1"
 )
 
