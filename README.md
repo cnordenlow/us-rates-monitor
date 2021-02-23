@@ -5,6 +5,3 @@ A Shiny app to monitor US Interest Rates.
 
 Shiny app can be found *[here](https://cnordenlow.shinyapps.io/usRateMonitor/)*. 
 
-Code available on *[github](https://github.com/cnordenlow/us-rates-monitor)*.
-
-<img alt = 'usratesmonitor' src='/us_rates_monitor/usrates.PNG' width="700" height="400"/>
